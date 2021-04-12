@@ -40,6 +40,6 @@ TSQL_scriptExecution.ps1 (executes T-SQL scripts)<br />
 SQLServerList.txt (list of target SQL Server instances)<br />
 Create_logScriptExecution.sql (creates execution log table)
 
-#### Paraneters:
+#### Parameters:
 param([Int32] $toTable=0, $logToTable=0) 
 
