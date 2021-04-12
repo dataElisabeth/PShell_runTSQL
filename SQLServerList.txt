@@ -1,0 +1,2 @@
+mySQLServer
+mySQLServer\someinstance
