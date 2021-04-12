@@ -11,7 +11,7 @@ $reposDB = "myDB"
 ### 2. Open SQLServerList.txt and add target servers.
 
 ### 3. Script Execution:
-In script root:
+In script root:<br />
 .\TSQL_scriptExecution.ps1
 
 Executes with defaults; all output  goes to files (from scripts, log execution results)
@@ -21,7 +21,8 @@ Executes with defaults; all output  goes to files (from scripts, log execution r
 -logToTable 1		(logs execution result into a table)
 
 E.g:
-.\scriptExecution.ps1 -logToTable 1				(script output to file, log execution result to table)
+.\scriptExecution.ps1 -logToTable 1	<br />
+(script output to file, log execution result to table)
 
 ### 4. Adding your own scripts to execute
 1. Add T-SQL script to the Scripts folder <br />
@@ -35,8 +36,8 @@ Scripts_Output (script results output folder) <br />
 (Invoke-Sqlcmd2, Write-DataTable: Supporting cmdlets)
 
 #### Files:
-TSQL_scriptExecution.ps1 (executes T-SQL scripts)
-SQLServerList.txt (list of target SQL Server instances)
+TSQL_scriptExecution.ps1 (executes T-SQL scripts)<br />
+SQLServerList.txt (list of target SQL Server instances)<br />
 Create_logScriptExecution.sql (creates execution log table)
 
 #### Paraneters:
