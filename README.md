@@ -5,40 +5,40 @@ The script lets you choose whether to store output in a database table or output
 
 ### 1. Open TSQL_scriptExecution and change the following variables:
 
-$adminServer = "mySqlserver\myInstance"
+$adminServer = "mySqlserver\myInstance" <br />
 $reposDB = "myDB"
 
 ### 2. Open SQLServerList.txt and add target servers.
 
-### 3. SCRIPT EXECUTION:
+### 3. Script Execution:
 In script root:
 .\TSQL_scriptExecution.ps1
 
 Executes with defaults; all output  goes to files (from scripts, log execution results)
 
-#### PARAMETERS;
--toTable 1 	Inserts output into tables
--logToTable 1	Logs execution result into a table
+##### PARAMETERS;
+-toTable 1			(inserts output into tables) <br />
+-logToTable 1		(logs execution result into a table)
 
 E.g:
-.\scriptExecution.ps1 -logToTable 1	Script output to file, log execution result to table
+.\scriptExecution.ps1 -logToTable 1				(script output to file, log execution result to table)
 
-### 4. ADDING SCRIPTS TO EXECUTE
-1. Add T-SQL script to the Scripts folder
+### 4. Adding your own scripts to execute
+1. Add T-SQL script to the Scripts folder <br />
 2. Add script to create table to store output from new script (include IF NOT EXIST statement)
 
-#### FOLDERS:
-Scripts: 		T-SQL scripts to run
-Scripts_CreateTables:	Scripts that creates tables to hold output (runs if -toTable =1)
-Scripts_Output:		Script results output folder
+#### Folders:
+Scripts 							(T-SQL scripts to run)<br />
+Scripts_CreateTables (scripts that creates tables to hold output; runs if -toTable =1)<br />
+Scripts_Output (script results output folder) <br />
 
 (Invoke-Sqlcmd2, Write-DataTable: Supporting cmdlets)
 
-#### FILES:
-TSQL_scriptExecution.ps1		Executes T-SQL scripts
-SQLServerList.txt			List of target SQL Server instances
-CreateTbl_tblLogScriptExecution.sql	Creates execution log table
+#### Files:
+TSQL_scriptExecution.ps1 (executes T-SQL scripts)
+SQLServerList.txt (list of target SQL Server instances)
+Create_logScriptExecution.sql (creates execution log table)
 
-#### PARAMETERS:
+#### Paraneters:
 param([Int32] $toTable=0, $logToTable=0) 
 
