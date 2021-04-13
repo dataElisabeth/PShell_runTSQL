@@ -23,7 +23,7 @@ import-module  ".\Invoke-Sqlcmd2\Invoke-Sqlcmd2.psm1"
 # Add-PSSnapin SqlServerProviderSnapin100
 
 # 1. Must change! Name the admin server and database
-$adminServer = "PORTEGEA30c\sixteen"
+$adminServer = "mysqlserver\myinstance"
 $reposDB = "admin"
 
 # 2. (optional): Change path to .txt file with list of servers
