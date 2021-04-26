@@ -1,4 +1,5 @@
-﻿
+﻿#weird weird output using csv.
+
 # This script Executes all scripts in .\Scripts\ on all SQL Server instances in  \SQLServerList.txt 
 # and outputs to .\Script_output - see VARIABLES  below\
 
@@ -23,7 +24,7 @@ import-module  ".\Invoke-Sqlcmd2\Invoke-Sqlcmd2.psm1"
 # Add-PSSnapin SqlServerProviderSnapin100
 
 # 1. Must change! Name the admin server and database
-$adminServer = "PORTEGEA30c\sixteen"
+$adminServer = "someserver\someinstance"
 $reposDB = "admin"
 
 # 2. (optional): Change path to .txt file with list of servers
@@ -89,7 +90,8 @@ foreach($instanceName in $instanceNameList)
             if ($toTable -eq 0) 
                 {
                 #Write-Host "Script output to directory: " $outputpath
-                Invoke-Sqlcmd2 -ServerInstance $instanceName -InputFile $f.fullname | Format-Table -autosize | Out-File  -filePath $outputfilepath
+                #Invoke-Sqlcmd2 -ServerInstance $instanceName -InputFile $f.fullname | Format-Table -autosize | Out-File  -filePath $outputfilepath #fixedlength output
+                Invoke-Sqlcmd2 -ServerInstance $instanceName -InputFile $f.fullname |  Export-Csv $outputfilepath  -Delimiter "~" -NoTypeInformation
                 }              
                 else {
                         #Write-Host "Script output to server: " $adminServer
@@ -104,7 +106,6 @@ foreach($instanceName in $instanceNameList)
                 $logRecord = Get-Date -Format "yyyy-MM-dd HH:mm:ss".ToString()
                
                 $logRecord = $logRecord + "   " + $instanceName + "   " + $f + "   Successful: " + $?
-               
                 $logRecord | Out-File ScriptExec_Log_$(get-date -f yyyy-MM-dd).txt -append
                
                 }
