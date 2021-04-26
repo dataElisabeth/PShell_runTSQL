@@ -1,2 +1,2 @@
-mySQLServer
-mySQLServer\someinstance
+myserver
+myserver\myinstance
