@@ -1,7 +1,8 @@
 ## PShell_runTSQL
-Powershell Script to Run Multiple T-SQL Scripts on Multiple SQL Server Instances
 
-The script lets you choose whether to store output in a database table or output to file.
+* Powershell Script to Run Multiple T-SQL Scripts on Multiple SQL Server Instances
+
+* The script lets you choose whether to store output in a database table or delimited .CSV file.
 
 ### 1. Open TSQL_scriptExecution and change the following variables:
 
@@ -26,7 +27,7 @@ E.g:
 
 ### 4. Adding your own scripts to execute
 1. Add T-SQL script to the Scripts folder <br />
-2. Add script to create table to store output from new script (include IF NOT EXIST statement)
+2. If you want script output to tables; add script to create table for the output (Note!!! include IF NOT EXIST statement)
 
 #### Folders:
 Scripts 							(T-SQL scripts to run)<br />
