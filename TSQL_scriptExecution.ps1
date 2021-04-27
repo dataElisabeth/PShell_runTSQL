@@ -1,9 +1,15 @@
-﻿#weird weird output using csv.
 
-# This script Executes all scripts in .\Scripts\ on all SQL Server instances in  \SQLServerList.txt 
-# and outputs to .\Script_output - see VARIABLES  below\
+# This script Executes all scripts in .\Scripts\<include>  on all SQL Server instances in  \SQLServerList.txt 
+# and outputs to .\<include>\Script_output
+# Please see variables below for must change variables
 
-param([Int32]  $createTables = 0, $toTable=0, $logToTable =0) 
+param(
+[String []] 
+$include = ("admin","cache"),
+ [ValidateSet(“admin",”cache”,"index")] 
+
+[Int32] $toTable=0, $logToTable =0) 
+
  
 Set-Location $PSScriptRoot
 
@@ -17,26 +23,25 @@ import-module  ".\Invoke-Sqlcmd2\Invoke-Sqlcmd2.psm1"
 # 4. $createTableScripts - default =.\Scripts_createTables. Creates tables (IF NOT EXISTS)  to store result when -toTable = 1.
 
 
-# NOTE!!! If you want to filter on script name, edit and comment out: "-Filter *<filter phrase>k*.sql "
-
-# If you want to run from Windows PS Shell, the following two lines of code needs to be run first
-# Add-PSSnapin SqlServerCmdletSnapin100
-# Add-PSSnapin SqlServerProviderSnapin100
+# NOTE!!! If you want to filter on script name, edit : "-Filter *<filter phrase>*.sql "
+# in "foreach ($f in Get-ChildItem -path $scriptSubdir..."
 
 # 1. Must change! Name the admin server and database
-$adminServer = "someserver\someinstance"
-$reposDB = "admin"
+$adminServer = "myserver\myinstance"
+$reposDB = "dba"
 
 # 2. (optional): Change path to .txt file with list of servers
 $instanceNameList = Get-Content   ($PSScriptRoot + "\SQLServerList.txt")
 
-# 3 (optional).: Change path to point to directory with script files to run and  output directory
+# 3 (optional): Change path to point to directory with script files to run and  output directory
 $ScriptDirectory = $PSScriptRoot + ".\Scripts\"
-$outputpath = $PSScriptRoot + ".\Scripts_output\" 
+$outputpath = $PSScriptRoot + ".\Script_output\" 
 
-$createTableScripts = $PSScriptRoot + ".\Scripts_CreateTables\"  #Scripts to create tables to hold output if applic.
+#Scripts to create tables to hold output -toTable = 1 
+$createTableScripts = $PSScriptRoot + ".\Scripts_CreateTables\"  
 
-$tblLogScriptExec = ".\CREATE_logScriptExecution.sql"  # Script to create log table for execution result
+# Script to create log table for execution result if -logToTable = 1
+$tblLogScriptExec = ".\CREATE_logScriptExecution.sql"  
 
 # Dealing with parameter choices 
 if ($toTable  -eq 1) 
@@ -70,26 +75,36 @@ foreach($instanceName in $instanceNameList)
 
 {
   Write-Host "Starting on "  $instanceName
+  foreach ($i in $include)
+    {
+        
+        $scriptSubdir = $ScriptDirectory  + $i
+        #write-host $scriptSubdir
+        #write-host $newpath
+        Write-Host "Running scripts in "  $i
+
   Try
   {
 
-    # Loop through and execute all .sql files($f)  in $ScriptDirectory on $instanceName 
-    # (comment out next line to use  -Filter
+    # Loop through and execute all .sql files($f)  in $scriptSubdir on $instanceName 
          
-    # foreach ($f in Get-ChildItem -path $ScriptDirectory -Filter *back*.sql  | sort-object -desc ) 
+    # foreach ($f in Get-ChildItem -path $scriptSubdir -Filter *back*.sql  | sort-object -desc ) 
 
-    foreach ($f in Get-ChildItem -path $ScriptDirectory | sort-object -desc )
+    foreach ($f in Get-ChildItem -path $scriptSubdir -Filter *.sql | sort-object -desc ) 
     
 	{ 
         Try
         {
             $outputInstance = $instancename -replace '\\','_'
-            $outputfile = $f.BaseName + $outputInstance + '.txt'
-            $outputfilepath = $outputpath + $outputfile
+            $outputfile = $outputInstance +'_' + $f.BaseName + '.txt'
             
+            $outputSubdir = $outputpath  + $i +'\'
+            $outputfilepath = $outputSubdir + $outputfile
+            
+
             if ($toTable -eq 0) 
                 {
-                #Write-Host "Script output to directory: " $outputpath
+                #Write-Host "Script output to directory: " $outputSubdir
                 #Invoke-Sqlcmd2 -ServerInstance $instanceName -InputFile $f.fullname | Format-Table -autosize | Out-File  -filePath $outputfilepath #fixedlength output
                 Invoke-Sqlcmd2 -ServerInstance $instanceName -InputFile $f.fullname |  Export-Csv $outputfilepath  -Delimiter "~" -NoTypeInformation
                 }              
@@ -135,7 +150,7 @@ foreach($instanceName in $instanceNameList)
             continue
         }
         
-	} # End of Foreach Get-ChildItem -path $ScriptDirectory (all scripts)
+	} # End of foreach ($f in Get-ChildItem -path $scriptSubdir (scripts in on subfolder))
 
 }
 Catch
@@ -157,6 +172,9 @@ Catch
                     }
             continue
         }
+    Write-Host "Finished running " $i " scripts on" $instancename    
       
+  } # End of foreach $i in $include (all scripts in all folders)
+
 Write-Host "Finished on " $instanceName
-} # End of foreach($instanceName in $instanceNameList (all servers)
+} # End of foreach $instanceName in $instanceNameList (all servers)
