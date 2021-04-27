@@ -23,7 +23,9 @@ Executes with defaults; all output from Scripts\admin and Scripts\cache goes to 
 - include       (commaseparated list to determine which subfolder to look for scripts in - admin,cache, index)
 
 #### Parameter Defaults
-- toTable = 1, -logToTabl = 1, include = (admin, cache)
+toTable = 1 <br />
+logToTable = 1 <br />
+include = (admin, cache) <br />
 
 E.g:
 .\scriptExecution.ps1 -logToTable 1	<br />
