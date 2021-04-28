@@ -43,17 +43,17 @@ E.g:
 Scripts 							(T-SQL scripts to run)<br />
 Scripts_CreateTables (scripts that creates tables to hold output; runs if -toTable =1)<br />
 Script_Output (script results output folder) <br />
-             \admin
-             \cache
-             \index
+             \admin <br />
+             \cache  <br />
+             \index  <br />
              
 (Invoke-Sqlcmd2, Write-DataTable: Supporting cmdlets)
 
 #### Files:
 TSQL_scriptExecution.ps1 (executes T-SQL scripts)<br />
 SQLServerList.txt (list of target SQL Server instances)<br />
-Create_logScriptExecution.sql (creates execution log table)
-Some sample T-SQL Scripts in Script folder
+Create_logScriptExecution.sql (creates execution log table) <br />
+Some sample T-SQL Scripts in Script subfolders
 
 #### Parameters:
 [String []])<br />
